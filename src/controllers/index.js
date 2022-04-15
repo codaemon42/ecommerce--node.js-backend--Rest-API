@@ -1,0 +1,8 @@
+
+
+module.exports = {
+	ProductController: require('./products/product.controller'),
+	AttributesController: require('./attributes/Attributes.controller'),
+	AttributeValuesController: require('./attributes/AttributeValues.controller'),
+	UsersController:  require('./users/Users.controller')
+}
