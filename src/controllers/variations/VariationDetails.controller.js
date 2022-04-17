@@ -1,41 +1,21 @@
 const createError = require("http-errors");
-const { console, isValid, errorHandler, prepare } = require("../../helpers");
-const AttributesService = require("../../services/attributes/Attributes.service");
-const AttributesValidation = require("../../validations/attributes/Attributes.validation");
+const { console, isValid, prepare } = require("../../helpers");
+const VariationDetailsService = require("../../services/variations/VariationDetails.service");
+const VariationDetailsValidation = require("../../validations/variations/VariationDetails.validation");
 
-class AttributesController {
+class VariationDetailsController {
 	constructor(){
-		console('AttributesController created');
-	}
-
-	async fetch(req, res, next) {
-		try{
-			const data = req.query;
-			// validation & verification
-			const validation = AttributesValidation.searchDto(data);
-			const validationHandler = isValid(validation);
-			if(!validationHandler.valid) return next(validationHandler.error)
-
-			// process
-			const result = await AttributesService.getAttributes(data);
-
-			// handle error and send response
-			return res.json(prepare(result));
-		} catch(err) {
-			console(err.message)
-			next(createError(500));
-		}
+		console('VariationDetailsController created');
 	}
 
 	async findOne(req, res, next) {
 		try{
 			const id = req.params.id;
-
 			// validate
 			if(!id) return next(createError(400))
 
 			// process
-			const result = await AttributesService.findOne(id);
+			const result = await VariationDetailsService.findOne(id);
 
 			// handle error  response
 
@@ -52,12 +32,12 @@ class AttributesController {
 			const data = req.body;
 			console(data);
 			// validation & verification
-			const validation = AttributesValidation.postDto(data);
+			const validation = VariationDetailsValidation.postDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error)
 
 			// process
-			const result = await AttributesService.create(data);
+			const result = await VariationDetailsService.create(data);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -73,12 +53,13 @@ class AttributesController {
 			const data = req.body;
 			console(data);
 			// validation & verification
-			const validation = AttributesValidation.updateDto(data);
+			if(!id) return next(createError(400));
+			const validation = VariationDetailsValidation.updateDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error)
 
 			// process
-			const result = await AttributesService.update(id, data);
+			const result = await VariationDetailsService.update(id, data);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -92,10 +73,10 @@ class AttributesController {
 	async delete(req, res, next) {
 		try{
 			const id = req.params.id;
-			if(!id) return next(createError(404));
+			if(!id) return next(createError(400));
 
 			// process
-			const result = await AttributesService.delete(id);
+			const result = await VariationDetailsService.delete(id);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -106,4 +87,4 @@ class AttributesController {
 	}
 }
 
-module.exports = new AttributesController();
+module.exports = new VariationDetailsController();

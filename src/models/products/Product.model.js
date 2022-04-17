@@ -16,8 +16,15 @@ const Product = sequelize.define('products',{
 	shortDescription: {
 		type: DataTypes.TEXT('long')
 	},
+	brandId: {
+		type: DataTypes.INTEGER
+	},
 	price: {
 		type: DataTypes.INTEGER
+	},
+	stock: {
+		type: DataTypes.INTEGER,
+		defaultValue: -1
 	},
 	featureImage: {
 		type: DataTypes.STRING

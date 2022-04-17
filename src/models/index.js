@@ -1,6 +1,8 @@
 const { console } = require('../config');
 const Product = require('./products/Product.model');
 
+const Categories = require('./categories/Categories.model');
+
 const Attributes = require('./attributes/Attributes.model');
 const AttributeValues = require('./attributes/AttributeValues.model');
 
@@ -14,61 +16,89 @@ const Reviews = require('./reviews/reviews.model');
 
 const User = require('./users/User.model');
 const UserRole = require('./users/UserRole.model');
+const ProCatTax = require('./categories/Categories-Product-relation.model');
+const Menu = require('./menu/Menu.model');
+const Brand = require('./brands/Brands.model');
 
 
 // // sync 
-// Product.sync().then((e)=>{
+// Product.sync({alter: true}).then((e)=>{
 // 	console('creating Products table');
 // });
 // Attributes.sync();
 // AttributeValues.sync();
 // Variations.sync();
 // VariationAttributes.sync();
-// VariationDetails.sync();
-// Images.sync();
+// VariationDetails.sync({force: true});
+// Images.sync({alter: true});
 // Reviews.sync();
 // User.sync({force: true});
 // UserRole.sync({force: true});
+// Categories.sync({force: true})
+// ProCatTax.sync({force: true})
+// Brand.sync({alter: true});
+// Menu.sync({force: true});
 
 
 // relations
-// Product.hasMany(Variations, {
-// 	foreignKey: 'productId'
-// });
-// Product.hasMany(Images, {
-// 	foreignKey: 'caseId'
-// })
-// // Variations.belongsTo(Product)
-// Variations.hasMany(VariationAttributes, {
-// 	foreignKey: 'variationId'
-// })
+Product.hasMany(Variations, {
+	foreignKey: 'productId'
+});
+Product.hasMany(Images, {
+	foreignKey: 'caseId'
+})
+Product.hasOne(Brand,{
+	foreignKey: 'id',
+	sourceKey: 'brandId'
+})
+// Variations.belongsTo(Product)
+Variations.hasMany(VariationAttributes, {
+	foreignKey: 'variationId'
+})
 
 
-// Variations.hasOne(VariationDetails, {
-// 	foreignKey: 'variationId'
-// })
 
-// VariationAttributes.hasOne(AttributeValues, {
-// 	foreignKey: 'id',
-// 	sourceKey: 'attributeValueId'
-// })
+Variations.hasOne(VariationDetails, {
+	foreignKey: 'variationId'
+})
 
-// Variations.hasMany(Images, {
-// 	foreignKey: 'caseId'
-// })
+VariationAttributes.hasOne(AttributeValues, {
+	foreignKey: 'id',
+	sourceKey: 'attributeValueId'
+})
 
-// User.hasOne(UserRole, {
-// 	foreignKey: 'id',
-// 	sourceKey: 'roleId'
-// });
+Variations.hasMany(Images, {
+	foreignKey: 'caseId'
+})
 
-// Attributes.hasMany(AttributeValues, {
-// 	foreignKey: 'id',
-// 	targetKey: 'attributeValuesId'
-// })
-// AttributeValues.belongsTo(VariationAttributes, {
-// 	foreignKey: 'attributeValuesId'
-// })
+User.hasOne(UserRole, {
+	foreignKey: 'id',
+	sourceKey: 'roleId'
+});
+
+Attributes.hasMany(AttributeValues, {
+	foreignKey: 'id',
+	targetKey: 'attributeValuesId'
+})
+AttributeValues.belongsTo(VariationAttributes, {
+	foreignKey: 'attributeValuesId'
+})
+
+
+// relate parent to child categories
+Categories.hasMany(Categories, {
+  as: 'children',
+  foreignKey: 'parentId',
+});
+
+Product.belongsToMany(Categories, {
+	through: ProCatTax
+})
+
+Menu.hasMany(Menu, {
+	as: 'children',
+	foreignKey: 'parentId'
+})
 
 
 
@@ -82,5 +112,8 @@ module.exports = {
 	Images,
 	Reviews,
 	User,
-	UserRole
+	UserRole,
+	Categories,
+	Menu,
+	Brand
 }

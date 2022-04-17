@@ -1,24 +1,19 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const Images = sequelize.define('Images',{
+const ProCatTax = sequelize.define('product_category_relation',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
 		primaryKey: true
 	},
-	title: {
-		type: DataTypes.STRING
-	},
-	caseType: {
-		type: DataTypes.ENUM('product', 'variation')
-	},
-	caseId: {
+	categoryId: {
 		type: DataTypes.INTEGER
 	},
-	url: {
-		type: DataTypes.STRING
+	productId: {
+		type: DataTypes.INTEGER
 	}
+
 });
 
-module.exports = Images;
+module.exports = ProCatTax;

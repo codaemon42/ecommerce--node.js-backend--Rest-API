@@ -4,3 +4,4 @@ infoLogs.log
 .env
 ztest.js
 package-lock.json
+done.txt

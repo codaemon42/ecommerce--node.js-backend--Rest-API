@@ -14,25 +14,17 @@ class ProductValidator {
 
 	postDto(data) {
 		return joi.object({
+			parentId: joi.number().default(0).optional(),
 			title: joi.string().required(),
 			description: joi.string().required(),
-			shortDescription: joi.string().required(),
-			price: joi.number().required(),
-			stock: joi.number().required(),
-			brandId: joi.number().optional(),
-			featureImage: joi.string().required()
 		}).validate(data);
 	}
 
 	updateDto(data) {
 		return joi.object({
+			parentId: joi.number().optional(),
 			title: joi.string().optional(),
-			description: joi.string().optional(),
-			shortDescription: joi.string().optional(),
-			price: joi.number().optional(),
-			stock: joi.number().optional(),
-			brandId: joi.number().optional(),
-			featureImage: joi.string().optional()
+			description: joi.string().optional()
 		}).validate(data);
 	}
 }

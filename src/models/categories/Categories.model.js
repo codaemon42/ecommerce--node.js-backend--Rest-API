@@ -1,24 +1,22 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const Images = sequelize.define('Images',{
+const Categories = sequelize.define('categories',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
 		primaryKey: true
 	},
+	parentId: {
+		type: DataTypes.INTEGER,
+		defaultValue: 0
+	},
 	title: {
 		type: DataTypes.STRING
 	},
-	caseType: {
-		type: DataTypes.ENUM('product', 'variation')
-	},
-	caseId: {
-		type: DataTypes.INTEGER
-	},
-	url: {
+	description: {
 		type: DataTypes.STRING
 	}
 });
 
-module.exports = Images;
+module.exports = Categories;

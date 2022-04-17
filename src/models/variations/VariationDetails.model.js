@@ -12,7 +12,17 @@ const VariationDetails = sequelize.define('VariationDetails',{
 	},
 	price: {
 		type: DataTypes.INTEGER
-	}
+	},
+	stock: {
+		type: DataTypes.INTEGER,
+		defaultValue: -1
+	},
+	description: {
+		type: DataTypes.TEXT('long')
+	},
+	featureImage: {
+		type: DataTypes.STRING
+	},
 });
 
 module.exports = VariationDetails;

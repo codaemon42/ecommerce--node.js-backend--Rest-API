@@ -1,23 +1,17 @@
 const createError = require("http-errors");
-const { console, isValid, errorHandler, prepare } = require("../../helpers");
-const AttributesService = require("../../services/attributes/Attributes.service");
-const AttributesValidation = require("../../validations/attributes/Attributes.validation");
+const { console, isValid, prepare } = require("../../helpers");
+const BrandService = require("../../services/brands/Brand.service");
+const BrandValidation = require("../../validations/brands/Brands.validation");
 
-class AttributesController {
+class BrandsController {
 	constructor(){
 		console('AttributesController created');
 	}
 
 	async fetch(req, res, next) {
 		try{
-			const data = req.query;
-			// validation & verification
-			const validation = AttributesValidation.searchDto(data);
-			const validationHandler = isValid(validation);
-			if(!validationHandler.valid) return next(validationHandler.error)
-
 			// process
-			const result = await AttributesService.getAttributes(data);
+			const result = await BrandService.fetchAll();
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -35,7 +29,7 @@ class AttributesController {
 			if(!id) return next(createError(400))
 
 			// process
-			const result = await AttributesService.findOne(id);
+			const result = await BrandService.findOne(id);
 
 			// handle error  response
 
@@ -52,12 +46,12 @@ class AttributesController {
 			const data = req.body;
 			console(data);
 			// validation & verification
-			const validation = AttributesValidation.postDto(data);
+			const validation = BrandValidation.postDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error)
 
 			// process
-			const result = await AttributesService.create(data);
+			const result = await BrandService.create(data);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -73,12 +67,12 @@ class AttributesController {
 			const data = req.body;
 			console(data);
 			// validation & verification
-			const validation = AttributesValidation.updateDto(data);
+			const validation = BrandValidation.updateDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error)
 
 			// process
-			const result = await AttributesService.update(id, data);
+			const result = await BrandService.update(id, data);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -95,7 +89,7 @@ class AttributesController {
 			if(!id) return next(createError(404));
 
 			// process
-			const result = await AttributesService.delete(id);
+			const result = await BrandService.delete(id);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -106,4 +100,4 @@ class AttributesController {
 	}
 }
 
-module.exports = new AttributesController();
+module.exports = new BrandsController();

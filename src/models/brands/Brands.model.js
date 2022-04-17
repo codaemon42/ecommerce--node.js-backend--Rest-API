@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const Images = sequelize.define('Images',{
+const Brand = sequelize.define('brands',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
@@ -10,15 +10,12 @@ const Images = sequelize.define('Images',{
 	title: {
 		type: DataTypes.STRING
 	},
-	caseType: {
-		type: DataTypes.ENUM('product', 'variation')
+	description: {
+		type: DataTypes.STRING
 	},
-	caseId: {
-		type: DataTypes.INTEGER
-	},
-	url: {
+	image: {
 		type: DataTypes.STRING
 	}
 });
 
-module.exports = Images;
+module.exports = Brand;
