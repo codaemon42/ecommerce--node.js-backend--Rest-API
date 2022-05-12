@@ -30,8 +30,9 @@ class Service {
 			const item = await this.model.findByPk(id)
 			if(!item) {
 				return createError(404);
+			}else{
+				return item;
 			}
-			return item;
 		} catch(err) {
 			console(err, `${this.model.name} update id: ${id}`)
 			throw createError(500);
@@ -41,6 +42,7 @@ class Service {
 	async update(id, data) {
 		try{
 			const item = await this.findOne(id);
+			if(item instanceof Error) return item;
 			return await item.update(data);
 		} catch(err) {
 			console(err, `${this.model.name} update id: ${id}`)

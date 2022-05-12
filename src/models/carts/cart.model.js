@@ -7,21 +7,12 @@ const Cart = sequelize.define('carts',{
 		autoIncrement: true,
 		primaryKey: true
 	},
-	productId: {
-		type: DataTypes.INTEGER
-	},
-	variationId: {
-		type: DataTypes.INTEGER
+	type: {
+		type: DataTypes.STRING,
+		defaultValue: 'Guest'
 	},
 	userId: {
-		type: DataTypes.INTEGER,
-		defaultValue: 'guest'
-	},
-	rating: {
 		type: DataTypes.INTEGER
-	},
-	description: {
-		type: DataTypes.STRING
 	}
 });
 

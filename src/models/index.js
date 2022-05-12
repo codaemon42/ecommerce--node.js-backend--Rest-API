@@ -19,6 +19,14 @@ const UserRole = require('./users/UserRole.model');
 const ProCatTax = require('./categories/Categories-Product-relation.model');
 const Menu = require('./menu/Menu.model');
 const Brand = require('./brands/Brands.model');
+const Cart = require('./carts/cart.model');
+const CartItem = require('./carts/cartItems.model');
+
+const Order = require('./orders/order.model');
+const OrderAddress = require('./orders/orderAddress.model');
+const OrderItems = require('./orders/orderItems.model');
+
+const Shipping = require('./shipping/shipping.model');
 
 
 // // sync 
@@ -37,7 +45,13 @@ const Brand = require('./brands/Brands.model');
 // Categories.sync({force: true})
 // ProCatTax.sync({force: true})
 // Brand.sync({alter: true});
-// Menu.sync({force: true});
+// Menu.sync({alter: true});
+// Cart.sync({alter: true});
+// CartItem.sync({alter: true});
+// Order.sync({alter: true});
+// OrderItems.sync({alter: true});
+// OrderAddress.sync({alter: true});
+// Shipping.sync({alter: true});
 
 
 // relations
@@ -98,7 +112,22 @@ Product.belongsToMany(Categories, {
 Menu.hasMany(Menu, {
 	as: 'children',
 	foreignKey: 'parentId'
-})
+});
+
+Cart.hasMany(CartItem, {
+	as: 'cartItems',
+	foreignKey: 'cartId'
+});
+
+Order.hasMany(OrderItems, {
+	as: 'orderItems',
+	foreignKey: 'orderId'
+});
+
+Order.hasOne(OrderAddress, {
+	as: 'orderAddress',
+	foreignKey: 'orderId'
+});
 
 
 
@@ -115,5 +144,11 @@ module.exports = {
 	UserRole,
 	Categories,
 	Menu,
-	Brand
+	Brand,
+	Cart,
+	CartItem,
+	Order,
+	OrderAddress,
+	OrderItems,
+	Shipping
 }

@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi');
 
 
-class CategoryValidator {
+class MenuValidator {
 
 	searchDto(data) {
 		return joi.object({
@@ -16,7 +16,8 @@ class CategoryValidator {
 		return joi.object({
 			parentId: joi.number().default(0).optional(),
 			title: joi.string().required(),
-			description: joi.string().required(),
+			url: joi.string().required(),
+			order: joi.number().required(),
 		}).validate(data);
 	}
 
@@ -24,9 +25,10 @@ class CategoryValidator {
 		return joi.object({
 			parentId: joi.number().optional(),
 			title: joi.string().optional(),
-			description: joi.string().optional()
+			url: joi.string().optional(),
+			order: joi.number().optional(),
 		}).validate(data);
 	}
 }
 
-module.exports = new CategoryValidator();
+module.exports = new MenuValidator();

@@ -1,31 +1,39 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const Order = sequelize.define('orders',{
+const OrderAddress = sequelize.define('ordersAddress',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
 		primaryKey: true
 	},
-	userId: {
-		type: DataTypes.STRING,
-		defaultValue: 'guest'
-	},
-	subTotal: {
+	orderId: {
 		type: DataTypes.INTEGER
 	},
-	shippingCost: {
+	name: {
 		type: DataTypes.INTEGER
 	},
-	total: {
+	email: {
 		type: DataTypes.INTEGER
 	},
-	discount: {
-		type: DataTypes.INTEGER
-	},
-	couponCodes: {
+	phone: {
 		type: DataTypes.STRING
+	},
+	whatsapp: {
+		type: DataTypes.STRING
+	},
+	address: {
+		type: DataTypes.INTEGER
+	},
+	state: {
+		type: DataTypes.INTEGER
+	},
+	postcode: {
+		type: DataTypes.STRING
+	},
+	country: {
+		type: DataTypes.INTEGER
 	}
 });
 
-module.exports = Order;
+module.exports = OrderAddress;

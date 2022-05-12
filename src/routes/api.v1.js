@@ -7,6 +7,8 @@ const attributesRouter = require('./attributes/attributes.route')
 const UsersRouter = require('./users/users.route');
 const categoryRouter = require('./categories/category.route')
 const brandRouter = require('./brands/brands.route')
+const menuRouter = require('./menus/menu.route')
+const cartRouter = require('./carts/carts.route')
 
 router
 .use('/products', productRouter)
@@ -23,9 +25,12 @@ router
 
 .use('/brands', brandRouter)
 
+.use('/menus', menuRouter)
+
+.use('/carts', cartRouter)
 	
 .use('/', (req, res, next) => {
-		res.send('working')
+		res.send('hello world, are you bold ? ')
 })
 
 module.exports = router;

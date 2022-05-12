@@ -1,21 +1,21 @@
 const createError = require("http-errors");
 const { isValid, prepare, console } = require("../../helpers");
-const CategoryValidation = require("../../validations/categories/Category.validator");
-const CategoryService = require("../../services/categories/Category.service");
+const MenuValidation = require("../../validations/menus/Menu.validator");
+const MenuService = require("../../services/menus/Menu.service");
 
 
-class CategoryController {
+class MenuController {
 	constructor(){
 		console('ValidationsController initiated');
 	}
 
 
-	async fetchNestedCats(req, res, next) {
+	async fetchNested(req, res, next) {
 		try{
 			const parentId = req.query.parent_id || 0;
 			const depth = req.query.depth || 5;
 			console({depth, parentId})
-			const result = await CategoryService.getNestedCategory(+parentId, +depth);
+			const result = await MenuService.getNestedMenus(+parentId, +depth);
 			return res.json(prepare(result));
 		} catch(err) {
 			console(err.message)
@@ -28,13 +28,13 @@ class CategoryController {
 		try{
 			const data = req.body;
 
-			const validation = CategoryValidation.postDto(data);
+			const validation = MenuValidation.postDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error);
 
-			const result = await CategoryService.create(data);
+			const result = await MenuService.create(data);
 
-			return res.status(201).json(prepare(result, `${result.title} category created successfully`));
+			return res.status(201).json(prepare(result, `${result.title} ${MenuService.model.name} created successfully`));
 		} catch(err) {
 			console(err.message);
 			return next(createError(500))
@@ -47,13 +47,13 @@ class CategoryController {
 			const data = req.body;
 			const id = req.params.id;
 
-			const validation = CategoryValidation.updateDto(data);
+			const validation = MenuValidation.updateDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error);
 
-			const result = await CategoryService.update(id, data);
+			const result = await MenuService.update(id, data);
 
-			return res.json(prepare(result, `${result.title} category updated successfully`));
+			return res.json(prepare(result, `${result.title} ${MenuService.model.name} updated successfully`));
 		} catch(err) {
 			console(err.message);
 			return next(createError(500))
@@ -67,7 +67,7 @@ class CategoryController {
 			if(!id) return next(createError(404));
 
 			// process
-			const result = await CategoryService.delete(id);
+			const result = await MenuService.delete(id);
 
 			// handle error and send response
 			return res.json(prepare(result));
@@ -76,7 +76,9 @@ class CategoryController {
 			return next(createError(500));
 		}
 	}
+
+
 }
 
 
-module.exports = new CategoryController()
+module.exports = new MenuController()

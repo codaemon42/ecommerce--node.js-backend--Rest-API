@@ -1,25 +1,21 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const Menu = sequelize.define('menus', {
+const Shipping = sequelize.define('shipping',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
 		primaryKey: true
 	},
-	parentId: {
-		type: DataTypes.INTEGER,
-		defaultValue: 0
-	},
-	title: {
+	country: {
 		type: DataTypes.STRING
 	},
-	url: {
+	countryCode: {
 		type: DataTypes.STRING
 	},
-	order: {
+	shippingCost: {
 		type: DataTypes.INTEGER
 	}
 });
 
-module.exports = Menu;
+module.exports = Shipping;

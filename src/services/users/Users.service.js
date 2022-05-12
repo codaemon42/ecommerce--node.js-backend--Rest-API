@@ -8,11 +8,6 @@ class UsersService extends Service {
 	constructor() {
 		super(User);
 		console(`${this.model.name} service started`);
-		// User.findAll({
-		// 	where: {
-		// 		[Op.or]: [{username: 'admin'}, {email: 'admin@gmail.com'}]
-		// 	}
-		// }).then(a => console(a))
 	}
 
 	async getUsers(offset=0, limit=10, order='createdAt' ) {

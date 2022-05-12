@@ -8,7 +8,7 @@ router
 .get('/', CategoryController.fetchNestedCats)
 .post('/', CategoryController.create)
 .put('/:id', CategoryController.update)
-// .delete('/:id', AttributesController.delete)
+.delete('/:id', CategoryController.delete)
 // .get('/:id', AttributesController.findOne)
 
 module.exports = router;

@@ -6,7 +6,6 @@ const { hashSync, compareSync } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 const {sendEmail, verificationTemplate} = require('../../config/email')
-const verifyCustomerHTML = require('../../views/verifiyCustomerHTML')
 
 
 
