@@ -16,6 +16,7 @@ class UsersService extends Service {
 				include: [
 						{
 							model: UserRole,
+							as: 'userRole',
 							required: false,
 							attributes: {exclude: ['createdAt', 'updatedAt']},
 						},
@@ -39,6 +40,7 @@ class UsersService extends Service {
 			include: [
 				{
 					model: UserRole,
+					as: 'userRole',
 					required: false,
 					attributes: {exclude: ['createdAt', 'updatedAt']},
 				}

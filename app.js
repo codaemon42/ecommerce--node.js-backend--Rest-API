@@ -1,4 +1,5 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const createError = require('http-errors');
@@ -9,8 +10,26 @@ const { console } = require('./src/helpers');
 const router = require('./src/routes');
 const prepare = require('./src/helpers/prepare');
 
+const sequelize = require('./src/config/mysql.db');
+const productService = require('./src/services/products/product.service');
+const CartService = require('./src/services/carts/Cart.service');
+// const path = require('path');
+
+sequelize.authenticate().then(()=>{
+	console('connected')
+	productService.getProducts().then(p => console({p}))
+	CartService.fetchUserCarts(1).then(cart => console({cart}));
+	
+}).catch(err => {
+	console(`${err} : disconnected`)
+})
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+const ROOT_DIR = __dirname;
+module.exports.ROOT_DIR;
+console({ROOT_DIR});
 
 
 // handle rejection
@@ -29,7 +48,7 @@ app.use(cors({
 middleware(app);
 
 // routes
-router(app)
+router(app,express, __dirname)
 
 // unmatched route handle errors
 app.use((req, res, next)=>{
@@ -47,5 +66,9 @@ app.use((error, req, res, next) => {
 
 // listen
 app.listen(port, ()=>{
-	console(`server is listening at port ${port}`);
+	console(`server is listening at port`);
 })
+// // listen production
+// app.listen(()=>{
+// 	console(`server is listening at port`);
+// })

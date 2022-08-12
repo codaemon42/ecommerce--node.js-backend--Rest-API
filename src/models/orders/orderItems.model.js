@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const OrderItems = sequelize.define('ordersItems',{
+const OrderItems = sequelize.define('ordersitems',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
@@ -21,12 +21,6 @@ const OrderItems = sequelize.define('ordersItems',{
 	},
 	variationId: {
 		type: DataTypes.INTEGER
-	},
-	variation_title: {
-		type: DataTypes.STRING
-	},
-	variation_value: {
-		type: DataTypes.STRING
 	},
 	price: {
 		type: DataTypes.INTEGER

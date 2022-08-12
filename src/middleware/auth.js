@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         return next(createError(401));
     }
     console.log("auth before secret");
-    const secret = process.env.JWT_SECRET;
+    const secret = 'MYPRIVATEJWTKEY';
     const token = req.get('Authorization').split(' ')[1];
     console.log("token : ", token);
 

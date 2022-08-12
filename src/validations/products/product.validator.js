@@ -5,7 +5,7 @@ class ProductValidator {
 
 	searchDto(data) {
 		return joi.object({
-			title: joi.string().optional(),
+			title: joi.optional(),
 			page: joi.number().optional(),
 			limit: joi.number().optional(),
 			categoryId: joi.number().optional()

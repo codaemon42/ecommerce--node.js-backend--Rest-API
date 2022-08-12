@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const CartItem = sequelize.define('cartItems',{
+const CartItem = sequelize.define('cartitems',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
@@ -13,7 +13,16 @@ const CartItem = sequelize.define('cartItems',{
 	productId: {
 		type: DataTypes.INTEGER
 	},
+	product_title: {
+		type: DataTypes.STRING
+	},
+	product_image: {
+		type: DataTypes.STRING
+	},
 	variationId: {
+		type: DataTypes.INTEGER
+	},
+	price: {
 		type: DataTypes.INTEGER
 	},
 	quantity: {

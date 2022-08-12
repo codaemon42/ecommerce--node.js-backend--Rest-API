@@ -4,22 +4,16 @@ class OrderAddressValidator {
 
 	postDto(data) {
 		return joi.object({
-			cartId: joi.number().required(),
-			productId: joi.number().required(),
-			variationId: joi.number().required(),
-			quantity: joi.number().required()
+			name: joi.string().required(),
+			email: joi.string().required(),
+			phone: joi.string().required(),
+			whatsapp: joi.string().optional(),
+			address: joi.string().required(),
+			state: joi.string().required(),
+			postcode: joi.number().required(),
+			country: joi.string().required()
 		}).validate(data);
 	}
-
-	updateDto(data) {
-		return joi.object({
-			cartId: joi.number().optional(),
-			productId: joi.number().optional(),
-			variationId: joi.number().optional(),
-			quantity: joi.number().optional()
-		}).validate(data);
-	}
-
 
 }
 

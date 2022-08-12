@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const OrderAddress = sequelize.define('ordersAddress',{
+const OrderAddress = sequelize.define('ordersaddress',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,
@@ -11,10 +11,10 @@ const OrderAddress = sequelize.define('ordersAddress',{
 		type: DataTypes.INTEGER
 	},
 	name: {
-		type: DataTypes.INTEGER
+		type: DataTypes.STRING
 	},
 	email: {
-		type: DataTypes.INTEGER
+		type: DataTypes.STRING
 	},
 	phone: {
 		type: DataTypes.STRING
@@ -23,16 +23,16 @@ const OrderAddress = sequelize.define('ordersAddress',{
 		type: DataTypes.STRING
 	},
 	address: {
-		type: DataTypes.INTEGER
+		type: DataTypes.STRING
 	},
 	state: {
-		type: DataTypes.INTEGER
+		type: DataTypes.STRING
 	},
 	postcode: {
 		type: DataTypes.STRING
 	},
 	country: {
-		type: DataTypes.INTEGER
+		type: DataTypes.STRING
 	}
 });
 

@@ -11,6 +11,10 @@ const Order = sequelize.define('orders',{
 		type: DataTypes.STRING,
 		defaultValue: 'guest'
 	},
+	status: {
+		type: DataTypes.STRING,
+		defaultValue: 'pending'
+	},
 	subTotal: {
 		type: DataTypes.INTEGER
 	},

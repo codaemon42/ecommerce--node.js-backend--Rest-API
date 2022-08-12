@@ -1,9 +1,10 @@
 const { console } = require("../../helpers");
 const createError = require('http-errors');
-const { Product, VariationAttributes, Variations, VariationDetails, AttributeValues, Images, Categories } = require("../../models");
+const { Product, VariationAttributes, Variations, VariationDetails, AttributeValues, Images, Categories, Attributes } = require("../../models");
 const Service = require("../Service");
 const VariationDetailsService = require("../variations/VariationDetails.service");
 const Brand = require("../../models/brands/Brands.model");
+const { Op } = require("sequelize");
 
 class ProductService extends Service {
 
@@ -12,64 +13,77 @@ class ProductService extends Service {
 		console('product service created')
 	}
 
-		getIncludeQueryForOtherModel(){
+	getVariationNestedModel(){
 			return [
+				{
+					model: Variations,
+					as: 'Variations',
+					include: [
 						{
-							model: Variations,
+							model: VariationAttributes,
+							as: 'VariationAttributes',
 							include: [
 								{
-									model: VariationAttributes,
-									include: {
-										model: AttributeValues,
-										required: false,
-										attributes: ['id', 'title']
-									},
+									model: AttributeValues,
+									as: 'attributeValue',
 									required: false,
-									attributes: ['id', 'attributeId', 'attributeValueId']
+									attributes: ['id', 'title']
 								},
 								{
-									model: Images,
-									where: {
-										caseType: 'variation'
-									},
+									model: Attributes,
 									required: false,
-									attributes: ['id', 'url', 'title']
-								},
-								{
-									model: VariationDetails,
-									required: false,
-									attributes: {exclude: ['variationId', 'createdAt', 'updatedAt']}
+									attributes: ['id', 'title', 'description']
 								}
 							],
 							required: false,
-							attributes: ['id']
+							attributes: ['id', 'attributeId', 'attributeValueId']
 						},
 						{
 							model: Images,
+							as: 'Images',
 							where: {
-								caseType: 'product'
+								caseType: 'variation'
 							},
 							required: false,
 							attributes: ['id', 'url', 'title']
 						},
 						{
-							model: Categories,
+							model: VariationDetails,
+							as: 'VariationDetail',
 							required: false,
-							attributes: {exclude: ['product_category_relation', 'updatedAt', 'createdAt']}
-						},
-						{
-							model: Brand,
-							as: 'brand',
-							required: false
+							attributes: {exclude: ['variationId', 'createdAt', 'updatedAt']}
 						}
-					];
+					],
+					required: false,
+					attributes: ['id']
+				},
+				{
+					model: Images,
+					as: 'Images',
+					where: {
+						caseType: 'product'
+					},
+					required: false,
+					attributes: ['id', 'url', 'title']
+				},
+				{
+					model: Categories,
+					required: false,
+					attributes: {exclude: ['product_category_relation', 'updatedAt', 'createdAt']}
+				},
+				{
+					model: Brand,
+					as: 'brand',
+					required: false
+				}
+			];
 		}
 
 		async getProduct(id) {
 		try{
 			const data = await this.model.findOne({
 				where: {id},
-				include: this.getIncludeQueryForOtherModel()
+				include: this.getVariationNestedModel()
 			});
 
 			return data;
@@ -80,22 +94,97 @@ class ProductService extends Service {
 		}
 	}
 
-	async getProducts(offset=0, limit=10, order='createdAt' ) {
+
+	async getProductBySlug(slug) {
+		return await this.model.findOne({
+			where: { slug },
+			include: this.getVariationNestedModel()
+		});
+	}
+
+	async findBySlug(slug) {
+		return await this.model.findAll({
+			where: { 
+				slug: {[Op.like]: `%${slug}%`}
+			 }
+		});
+	}
+
+	async createUniueSlug(title) {
+		try {
+			const slug = title.toLowerCase().split(' ').join('-');
+			const matchingSlugs = await this.findBySlug(slug);
+			let slugSuffixs = [];
+			if( matchingSlugs && matchingSlugs.length > 0 ){
+				matchingSlugs.map(singleProduct => {
+					slugSuffixs.push(Math.abs(+singleProduct.slug.replace(slug, '')));
+				})
+				const newSuffix = Math.max(...slugSuffixs)+1;
+				const newSlug = `${slug}-${newSuffix}`;
+				return newSlug;
+			} else {
+				return slug;
+			}
+		} catch(err) {
+			console(err.message);
+			return createError(500);
+		}
+	}
+
+	async getProducts(data={}) {
 		try{
-			const data = await this.model.findAndCountAll({
-				include: this.getIncludeQueryForOtherModel(),
-					attributes: {exclude: ['brandId']},
-					offset,
-					limit,
-					order: [[order, 'DESC']]
-			});
+			const page = data.page || 1;
+			const limit = 10;
+			const offset = (page-1)*limit;
+			for(let [key, value] of Object.entries(data)){
+				if(key === 'title') data[key] = { [Op.like]: `%${value}%` }
+				else if(key === 'page') delete data[key];
+				else if(value === null && !value === 'title') delete data[key];
+			}
 
-			// const totalPage = await this.model.count();
+			if(data.categoryId){
+				const productRes = await this.findProductByCatId(data.categoryId, page)
+				return {count: productRes ? productRes.products.length : 0, rows: productRes ? productRes.products : []};
+			} else {
+				const result = await this.model.findAndCountAll({
+					where: {...data},
+					include: this.getVariationNestedModel(),
+						attributes: {exclude: ['brandId']},
+						offset,
+						limit,
+						order: [['createdAt', 'DESC']]
+				});
 
-			return data;
-			// return createError(500)
+				return result;
+			}
 		}catch(err){
 			console(err, 'product service')
+			return createError(500);
+		}
+	}
+
+
+
+	async findProductByCatId(catId, page=1){
+		try{
+			const limit = 10;
+			const offset = (page-1)*limit;
+
+			return await Categories.findOne({
+				where: {id: catId},
+				include:[
+					{
+						model: Product,
+						required: false,
+						include: this.getVariationNestedModel()
+					}
+				],
+				attributes: {exclude: ['id', 'title', 'parentId', 'description', 'createdAt', 'updatedAt']},
+				offset,
+				limit
+			})
+		}catch(err){
+			console(err.message);
 			return createError(500);
 		}
 	}

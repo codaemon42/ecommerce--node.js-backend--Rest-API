@@ -14,13 +14,15 @@ class ProductController {
 
 	async fetch(req, res, next){
 		try{
+			const data = req.query;
+			if(!data.page) data.page = 1;
 			// validation & verification
-			const validation = ProductValidator.searchDto(req.body);
+			const validation = ProductValidator.searchDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error)
 
 			// process
-			const result = await ProductService.getProducts();
+			const result = await ProductService.getProducts(data);
 
 			// handle error & send response
 			return res.json(prepare(result));
@@ -31,12 +33,12 @@ class ProductController {
 	}
 	async fetchOne(req, res, next){
 		try{
-			const {id} = req.params;
+			const {slug} = req.params;
 			// validation & verification
-			if(!id) return next(createError(404));
+			if(!slug) return next(createError(404));
 
 			// process
-			const result = await ProductService.getProduct(id);
+			const result = await ProductService.getProductBySlug(slug);
 
 			// handle error & send response
 			return res.json(prepare(result));
@@ -53,6 +55,8 @@ class ProductController {
 			const validation = ProductValidator.postDto(data);
 			const validationHandler = isValid(validation);
 			if(!validationHandler.valid) return next(validationHandler.error);
+
+			data.slug = await ProductService.createUniueSlug(data.title);
 
 			const result = await ProductService.create(data);
 

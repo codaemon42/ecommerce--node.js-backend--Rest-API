@@ -9,11 +9,17 @@ const categoryRouter = require('./categories/category.route')
 const brandRouter = require('./brands/brands.route')
 const menuRouter = require('./menus/menu.route')
 const cartRouter = require('./carts/carts.route')
+const productCatRouter = require('./products/products-cat.route')
+const pageRouter = require('./pages/pages.route')
+const uploadRouter = require('./uploads/uploads.route')
+const homepageRouter = require('./homepage/homepage.route')
+const { Auth } = require('../middleware');
 
 router
 .use('/products', productRouter)
+.use('/products-cat', productCatRouter)
 
-.use('/orders', orderRouter)
+.use('/orders', Auth, orderRouter)
 
 .use('/attributes', attributesRouter)
 
@@ -27,7 +33,13 @@ router
 
 .use('/menus', menuRouter)
 
-.use('/carts', cartRouter)
+.use('/carts',Auth, cartRouter)
+
+.use('/pages', pageRouter)
+
+.use('/uploads', uploadRouter)
+
+.use('/homepage', homepageRouter)
 	
 .use('/', (req, res, next) => {
 		res.send('hello world, are you bold ? ')

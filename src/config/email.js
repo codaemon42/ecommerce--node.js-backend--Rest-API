@@ -4,12 +4,12 @@ const { console } = require("../helpers");
 module.exports.sendEmail = (from=process.env.NODEMAILER_EMAIL, to, subject, body) => {
 
     const transporter = nodemailer.createTransport({
-        host: process.env.NODEMAILER_HOST,
-        port: process.env.NODEMAILER_PORT,
-        secure: process.env.NODEMAILER_SECURE, // true for 465, false for other ports
+        host: 'mail.wigbd.com',
+        port: 465,
+        secure: true, // true for 465, false for other ports
         auth: {
-            user: process.env.NODEMAILER_USER,
-            pass: process.env.NODEMAILER_PASS
+            user: 'info@wigbd.com',
+            pass: '03w)9B6Em!WddJ'
         },
         from,
         tls: {
@@ -58,16 +58,16 @@ module.exports.sendEmail = (from=process.env.NODEMAILER_EMAIL, to, subject, body
 
 
 module.exports.verificationTemplate = (username, token) => {
-		const from= 'rongobuy.com <test@rongobuy.com>';
+		const from= 'wigbd.com <info@wigbd.com>';
 		const subject= 'Account Verification ';
 		const body = `
 				<p> Hello  ${username},</p>
 	
-				<p> verify your account for ${process.env.SITE_NAME || 'e-commerce shop'}</p>
+				<p> verify your account for WIG BANGLADESH</p>
 	
-				<button> <a href="${process.env.APP_URL}/users/verify/${token}"> Click here </a> </button>
+				<button> <a href="https://test.wigbd/api/v1/users/verify/${token}"> Click here </a> </button>
 
-				<p> regards ${process.env.APP_URL}</p>
+				<p> regards WIG BANGLADESH</p>
 			`;
 		return {from, subject, body};
 }

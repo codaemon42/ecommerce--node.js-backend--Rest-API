@@ -3,5 +3,6 @@ module.exports = {
 	prepare: require('./prepare'),
 	errorHandler: require('./errorHandler'),
 	isValid: require('./valid'),
-	depthObjGenerator: require('./depthObjGenerator')
+	depthObjGenerator: require('./depthObjGenerator'),
+	getSiteUrl: require('./getSiteUrl')
 }

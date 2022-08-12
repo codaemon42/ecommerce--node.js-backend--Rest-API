@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const UserRole = sequelize.define('userRole',{
+const UserRole = sequelize.define('userrole',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,

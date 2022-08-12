@@ -40,6 +40,9 @@ class UsersController {
 				const validationHandler = isValid(validation);
 				if(!validationHandler.valid) return next(validationHandler.error);
 
+				//! remove it after verification email 
+				userData.verified = true;
+
 			//* process
 
 				//* check username and email for existing user
@@ -50,11 +53,11 @@ class UsersController {
 				}
 				else {
 					//* hashing password and create user
-					userData.password = hashSync(userData.password, +process.env.BCRYPT_SALT );
+					userData.password = hashSync(userData.password, (12) );
 					const user = await UsersService.create(userData);
 
 					//*  generating jwt token 
-					const token = jwt.sign( jwtOptions(user.id, user.username, user.roleId), process.env.JWT_SECRET);
+					const token = jwt.sign( jwtOptions(user.id, user.username, user.roleId), (process.env.JWT_SECRET || 'MYPRIVATEJWTKEY'));
 
 					//* sending verification email 
 					// ! mail response is ignored 
@@ -91,7 +94,7 @@ class UsersController {
 				if(!user.verified) return res.json(prepare([], 'user is not verified', false));
 
 				// jwt token {id: user.id, username: user.username, role: user.roleId}
-				const token = jwt.sign( jwtOptions(user.id, user.username, user.roleId), process.env.JWT_SECRET);
+				const token = jwt.sign( jwtOptions(user.id, user.username, user.roleId), 'MYPRIVATEJWTKEY');
 
 				// handle error & send response
 				return res.json(prepare({user, token}));
@@ -113,7 +116,7 @@ class UsersController {
 	async verifyUser(req, res, next) {
 		try{
 			const { token } = req.params;
-			const { id } = jwt.verify(token, process.env.JWT_SECRET);
+			const { id } = jwt.verify(token, 'MYPRIVATEJWTKEY');
 
 			const validation = UserValidator.verify({ id, token });
 			const validationHandler = isValid(validation);
@@ -121,7 +124,7 @@ class UsersController {
 
 			const result = await UsersService.verify(id);
 			console(result, 'console result : ')
-			return result instanceof Error ? res.redirect(process.env.FAILED_VERIFICATION_URL) : res.redirect(process.env.LOGIN_URL);
+			return result instanceof Error ? res.redirect('https://www.wigbd.com/tabs/account') : res.redirect('https://www.wigbd.com/tabs/account');
 
 		} catch(err){
 			console(err.message);

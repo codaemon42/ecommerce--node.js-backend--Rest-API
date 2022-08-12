@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
-const VariationDetails = sequelize.define('VariationDetails',{
+const VariationDetails = sequelize.define('variationdetails',{
 	id: {
 		type: DataTypes.BIGINT,
 		autoIncrement: true,

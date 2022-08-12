@@ -9,6 +9,14 @@ class CartsValidator {
 		}).validate(data);
 	}
 
+	addDto(data) {
+		return joi.object({
+			productId: joi.number().required(),
+			variationId: joi.number().required(),
+			quantity: joi.number().required()
+		}).validate(data);
+	}
+
 	updateDto(data) {
 		return joi.object({
 			type: joi.string().optional(),

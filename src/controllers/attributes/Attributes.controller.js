@@ -27,6 +27,20 @@ class AttributesController {
 		}
 	}
 
+
+	async fetchNested(req, res, next) {
+		try{
+			// process
+			const result = await AttributesService.getAttributesNested();
+
+			// handle error and send response
+			return res.json(prepare(result));
+		} catch(err) {
+			console(err.message)
+			next(createError(500));
+		}
+	}
+
 	async findOne(req, res, next) {
 		try{
 			const id = req.params.id;

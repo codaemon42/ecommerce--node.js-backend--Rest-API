@@ -1,4 +1,4 @@
-const { console } = require('../config');
+const { console } = require('../helpers');
 const Product = require('./products/Product.model');
 
 const Categories = require('./categories/Categories.model');
@@ -27,23 +27,26 @@ const OrderAddress = require('./orders/orderAddress.model');
 const OrderItems = require('./orders/orderItems.model');
 
 const Shipping = require('./shipping/shipping.model');
+const Messages = require('./messages/messages.model');
+
+const Pages = require('./pages/Pages.model');
 
 
 // // sync 
 // Product.sync({alter: true}).then((e)=>{
 // 	console('creating Products table');
 // });
-// Attributes.sync();
-// AttributeValues.sync();
-// Variations.sync();
-// VariationAttributes.sync();
-// VariationDetails.sync({force: true});
+// Attributes.sync({alter: true});
+// AttributeValues.sync({alter: true});
+// Variations.sync({alter: true});
+// VariationAttributes.sync({alter: true});
+// VariationDetails.sync({alter: true});
 // Images.sync({alter: true});
 // Reviews.sync();
-// User.sync({force: true});
-// UserRole.sync({force: true});
-// Categories.sync({force: true})
-// ProCatTax.sync({force: true})
+// User.sync({alter: true});
+// UserRole.sync({alter: true});
+// Categories.sync({alter: true})
+// ProCatTax.sync({alter: true})
 // Brand.sync({alter: true});
 // Menu.sync({alter: true});
 // Cart.sync({alter: true});
@@ -52,13 +55,18 @@ const Shipping = require('./shipping/shipping.model');
 // OrderItems.sync({alter: true});
 // OrderAddress.sync({alter: true});
 // Shipping.sync({alter: true});
+// Messages.sync({alter: true});
+// Pages.sync({alter: true});
+
 
 
 // relations
 Product.hasMany(Variations, {
+	as: 'Variations',
 	foreignKey: 'productId'
 });
 Product.hasMany(Images, {
+	as: 'Images',
 	foreignKey: 'caseId'
 })
 Product.hasOne(Brand,{
@@ -67,35 +75,47 @@ Product.hasOne(Brand,{
 })
 // Variations.belongsTo(Product)
 Variations.hasMany(VariationAttributes, {
+	as: 'VariationAttributes',
 	foreignKey: 'variationId'
 })
 
 
 
 Variations.hasOne(VariationDetails, {
+	as: 'VariationDetail',
 	foreignKey: 'variationId'
 })
 
 VariationAttributes.hasOne(AttributeValues, {
+	as: 'attributeValue',
 	foreignKey: 'id',
 	sourceKey: 'attributeValueId'
 })
+VariationAttributes.hasOne(Attributes, {
+	foreignKey: 'id',
+	sourceKey: 'attributeId'
+})
 
 Variations.hasMany(Images, {
+	as: 'Images',
 	foreignKey: 'caseId'
 })
 
 User.hasOne(UserRole, {
+	as: 'userRole',
 	foreignKey: 'id',
 	sourceKey: 'roleId'
 });
 
+
 Attributes.hasMany(AttributeValues, {
-	foreignKey: 'id',
-	targetKey: 'attributeValuesId'
+	as: 'attributeValue',
+	foreignKey: 'attributeId'
 })
+
 AttributeValues.belongsTo(VariationAttributes, {
-	foreignKey: 'attributeValuesId'
+	as: 'attributeValue',
+	foreignKey: 'attributeValueId'
 })
 
 
@@ -106,6 +126,9 @@ Categories.hasMany(Categories, {
 });
 
 Product.belongsToMany(Categories, {
+	through: ProCatTax
+})
+Categories.belongsToMany(Product, {
 	through: ProCatTax
 })
 
@@ -119,10 +142,32 @@ Cart.hasMany(CartItem, {
 	foreignKey: 'cartId'
 });
 
+CartItem.hasOne(Product, {
+	as: 'product',
+	sourceKey: 'productId',
+	foreignKey: 'id'
+})
+CartItem.hasOne(Variations, {
+	as: 'variation',
+	sourceKey: 'variationId',
+	foreignKey: 'id'
+})
+
 Order.hasMany(OrderItems, {
 	as: 'orderItems',
 	foreignKey: 'orderId'
 });
+
+OrderItems.hasOne(Product, {
+	as: 'product',
+	sourceKey: 'productId',
+	foreignKey: 'id'
+})
+OrderItems.hasOne(Variations, {
+	as: 'variation',
+	sourceKey: 'variationId',
+	foreignKey: 'id'
+})
 
 Order.hasOne(OrderAddress, {
 	as: 'orderAddress',
@@ -133,6 +178,7 @@ Order.hasOne(OrderAddress, {
 
 module.exports = {
 	Product,
+	ProCatTax,
 	Attributes,
 	AttributeValues,
 	Variations,
@@ -150,5 +196,7 @@ module.exports = {
 	Order,
 	OrderAddress,
 	OrderItems,
-	Shipping
+	Shipping,
+	Messages,
+	Pages
 }

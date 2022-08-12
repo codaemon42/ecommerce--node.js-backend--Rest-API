@@ -10,6 +10,17 @@ class CategoryController {
 	}
 
 
+	async fetchAndCountAllCategories(req, res, next) {
+		try{
+			const result = await CategoryService.fetchAll();
+			return res.json(prepare(result));
+		} catch(err) {
+			console(err.message)
+			return next(createError(500))
+		}
+	}
+
+
 	async fetchNestedCats(req, res, next) {
 		try{
 			const parentId = req.query.parent_id || 0;

@@ -16,7 +16,7 @@ class VariationAttributes {
 		return joi.object({
 			variationId: joi.number().required(),
 			attributeId: joi.number().required(),
-			attributeValueId: joi.string().required()
+			attributeValueId: joi.any().required()
 		}).validate(data);
 	}
 

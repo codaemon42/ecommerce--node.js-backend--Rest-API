@@ -41,6 +41,61 @@ class BrandsController {
 		}
 	}
 
+	async test(req, res, next) {
+		try{
+			const id = req.params.id;
+
+			// validate
+			if(!id) return next(createError(400))
+
+			// process
+
+			// handle error  response
+
+			return res.status(400).json({
+				"ErrorNumber": 10,
+				"Type": "ValidationException",
+				"Message": "A validation exception occurred",
+				"Elements": [
+				  {
+				    "ContactID": "00000000-0000-0000-0000-000000000000",
+				    "Addresses": [],
+				    "Phones": [
+				      {
+					"PhoneType": "DEFAULT",
+					"ValidationErrors": []
+				      },
+				      {
+					"PhoneType": "FAX",
+					"ValidationErrors": []
+				      },
+				      {
+					"PhoneType": "MOBILE",
+					"ValidationErrors": []
+				      },
+				      {
+					"PhoneType": "DDI",
+					"ValidationErrors": []
+				      }
+				    ],
+				    "ContactGroups": [],
+				    "ContactPersons": [],
+				    "HasValidationErrors": true,
+				    "ValidationErrors": [
+				      {
+					"Message": "Contact name cannot be empty"
+				      }
+				    ]
+				  }
+				]
+			      });
+			
+		} catch(err) {
+			console(err.message)
+			throw next(createError(500));
+		}
+	}
+
 	async create(req, res, next) {
 		try{
 			const data = req.body;

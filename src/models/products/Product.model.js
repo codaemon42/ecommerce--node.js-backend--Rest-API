@@ -1,3 +1,4 @@
+const { nanoid } = require("nanoid");
 const { DataTypes } = require("sequelize");
 const sequelize = require('../../config/mysql.db');
 
@@ -9,6 +10,10 @@ const Product = sequelize.define('products',{
 	},
 	title: {
 		type: DataTypes.STRING
+	},
+	slug: {
+		type: DataTypes.STRING,
+		default: nanoid(5)
 	},
 	description: {
 		type: DataTypes.TEXT('long')
